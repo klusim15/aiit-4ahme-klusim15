@@ -6,4 +6,4 @@ Hier sind alle Java Projekte, die während der "Corona-Quarantäne" im AIIT-Unte
 Klug Simon
 
 ## License: 
-Dieses Projekt ist unter der MIT Lizenz lizenziert - In der [LICENSE.md](https://github.com/klusim15/aiit-4ahme-klusim15/blob/master/LICENSE) Datei finden Sie weitere Details
+Dieses Projekt ist unter der MIT Lizenz lizenziert - In der [LICENSE](https://github.com/klusim15/aiit-4ahme-klusim15/blob/master/LICENSE) Datei finden Sie weitere Details
