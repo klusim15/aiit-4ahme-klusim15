@@ -1,6 +1,6 @@
 # aiit-4ahme-klusim15
 
-Hier sind alle Java Projekte, die während der Corona-Karantäne im AIIT-Unterricht erstellt werden.
+Hier sind alle Java Projekte, die während der "Corona-Quarantäne" im AIIT-Unterricht erstellt werden.
 
 ## Urheber:
 Klug Simon
