@@ -14,101 +14,124 @@ import java.util.List;
  * @author Simon Klug
  */
 public class Server {
-    
-    private final ServerSocket serverSocket;
+
+    private ServerSocket serverSocket;
     private final List<ConnectionHandler> handlers = new ArrayList<>();
     private long timeOffset;
     private long startMillis;
-    
+
     public void start(int port) throws IOException {
         serverSocket = new ServerSocket(port);
         timeOffset = 0;
+
         while (true) {
-            final Socket Socket = serverSocket.accept();
-            if (handlers.size < 3) {
+            final Socket clientSocket = serverSocket.accept();
+            if (handlers.size() < 3) {
                 final ConnectionHandler handler = new ConnectionHandler(clientSocket);
                 new Thread(handler).start();
                 handlers.add(handler);
-            } else {
-                clientSocket.close();
+
+                for (int i = 0; i < 3; i++) {
+                    if (!clientSocket.isConnected()) {
+                        clientSocket.close();
+                    }
+                }
             }
         }
     }
-    
+
     public boolean isTimerRunning() {
         return startMillis > 0;
     }
-    
-    public long getTimerMillis (){
+
+    public long getTimerMillis() {
         if (startMillis > 0) {
             return System.currentTimeMillis() - startMillis + timeOffset;
         } else {
-            return epochTime;
+            return timeOffset;
         }
     }
-    
-    public static void main(String[] args) {
-        new Server().start(8080);
-    }
-}
 
-class ConnectionHandler implements Runnable {
-    
-    private final Socket socket;
-    private boolean master;
-
-    public ConnectionHandler(Socket socket) {
-        this.socket = socket;
-    }
-    
-    public boolean isClosed () {
-        
-        return socket.isClosed;
-    }
-    
-    public boolean isMaster () {
-        return master;
+    public static void main(String[] args) throws IOException {
+        final Server server = new Server();
+        server.start(8080);
     }
 
-    @Override
-    public void run() {
-        try {
+    private class ConnectionHandler implements Runnable {
+
+        private final Socket socket;
+        private boolean master;
+
+        public ConnectionHandler(Socket socket) {
+            this.socket = socket;
+        }
+
+        public boolean isClosed() {
+            return socket.isClosed();
+        }
+
+        public boolean isMaster() {
+            return master;
+        }
+
+        @Override
+        public void run() {
+            int count = 0;
             while (true) {
-                final BufferedReader reader = new BufferedReader (new InputStreamReader(socket.getInputStream()));
-                final String line = reader.Line();
-                final Gson gson = new Gson();
-                final Request re = gson.fromJson(line, Request.class);
+                try {
+                    final BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    final String line = reader.readLine();
 
-                if (re.isMaster()) {
-                boolean setMasterTrue = true;
-                for (ConnectionHandler ch : handlers) {
-                    if (!ch.equals(this) && ch.isMaster == true) {
-                        setMasterTrue = false;
-                        break;
+                    Gson gson = new Gson();
+                    gson.toJson(line);
+                    final Request r = gson.fromJson(line, Request.class);
+
+                    final Gson gsonrsp = new Gson();
+                    Response rsp = gsonrsp.fromJson(line, Response.class);
+                    count++;
+                    rsp.setCount(count);
+
+                    if (r.isMaster()) {
+                        synchronized (handlers) {
+                            for (ConnectionHandler c : handlers) {
+                                this.master = true;
+                                if (c != this && c.isMaster() == true) {
+                                    this.master = false;
+                                    break;
+                                }
+                            }
+                        }
                     }
+                    if (this.master == true) {
+                        rsp.setMaster(true);
+                        if (r.isStart()) {
+                            startMillis = System.currentTimeMillis();
+                            rsp.setRunning(true);
+                        }
+                        if (r.isClear()) {
+                            if (isTimerRunning()) {
+                                startMillis = System.currentTimeMillis();
+                            }
+                            timeOffset = 0;
+                            rsp.setRunning(true);
+                            rsp.setTime(0);
+                        }
+                        if (r.isStop()) {
+                            timeOffset = getTimerMillis();
+                            startMillis = 0;
+                            rsp.setTime(timeOffset);
+                            rsp.setRunning(false);
+                        }
+                        if (r.isEnd()) {
+                            serverSocket.close();
+                            socket.close();
+                            handlers.remove(this);
+                        }
+                    }
+                } catch (Exception ex) {
+                    ex.printStackTrace();
                 }
-                master = setMasterTrue;
             }
-
-            if (re.isStart()) {
-                startMillis = System.currentTimeMillis();
-            }
-            if (re.isClear()) {
-                if (isTimerRunning) {
-                    startMillis = System.currentTimeMillis;
-                }
-                timeOffset = 0;
-            }
-            if (re.isStop()) {
-                timeOffset = getTimeMillis();
-                startMillis = 0;
-            }
-            if (re.isEnd()) {
-                socket.close();
-                handlers.remove(this);
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 }
