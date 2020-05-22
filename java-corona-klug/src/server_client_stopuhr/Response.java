@@ -5,6 +5,7 @@ package server_client_stopuhr;
  * @author Simon Klug
  */
 public class Response {
+
     private boolean master;
     private long count;
     private boolean running;
@@ -48,4 +49,11 @@ public class Response {
     public void setTime(long time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "Response{" + "master=" + master + ", count=" + count + ", running=" + running + ", time=" + time + '}';
+    }
+    
+    
 }
