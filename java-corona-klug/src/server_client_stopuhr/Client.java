@@ -28,7 +28,7 @@ public class Client extends javax.swing.JFrame {
     private void initComponents() {
         java.awt.GridBagConstraints gridBagConstraints;
 
-        jpanEast = new javax.swing.JPanel();
+        jpanButtons = new javax.swing.JPanel();
         jbutConnect = new javax.swing.JButton();
         jbutDisconnect = new javax.swing.JButton();
         jbutStart = new javax.swing.JButton();
@@ -37,12 +37,20 @@ public class Client extends javax.swing.JFrame {
         jbutEnd = new javax.swing.JButton();
         jtfCenter = new javax.swing.JTextField();
         jpanNorth = new javax.swing.JPanel();
+        jlabs = new javax.swing.JLabel();
+        jSlider1 = new javax.swing.JSlider();
+        jlabms = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jpanEast.setLayout(new java.awt.GridBagLayout());
+        jpanButtons.setLayout(new java.awt.GridBagLayout());
 
         jbutConnect.setText("Connect");
+        jbutConnect.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbutConnectActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
@@ -51,7 +59,7 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
-        jpanEast.add(jbutConnect, gridBagConstraints);
+        jpanButtons.add(jbutConnect, gridBagConstraints);
 
         jbutDisconnect.setText("Disconnect");
         jbutDisconnect.addActionListener(new java.awt.event.ActionListener() {
@@ -67,9 +75,14 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
-        jpanEast.add(jbutDisconnect, gridBagConstraints);
+        jpanButtons.add(jbutDisconnect, gridBagConstraints);
 
         jbutStart.setText("Start");
+        jbutStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbutStartActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
@@ -79,7 +92,7 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
-        jpanEast.add(jbutStart, gridBagConstraints);
+        jpanButtons.add(jbutStart, gridBagConstraints);
 
         jbutStop.setText("Stop");
         jbutStop.addActionListener(new java.awt.event.ActionListener() {
@@ -95,9 +108,14 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
-        jpanEast.add(jbutStop, gridBagConstraints);
+        jpanButtons.add(jbutStop, gridBagConstraints);
 
         jbutClear.setText("Clear");
+        jbutClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jbutClearActionPerformed(evt);
+            }
+        });
         gridBagConstraints = new java.awt.GridBagConstraints();
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
@@ -106,7 +124,7 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
-        jpanEast.add(jbutClear, gridBagConstraints);
+        jpanButtons.add(jbutClear, gridBagConstraints);
 
         jbutEnd.setText("End");
         jbutEnd.addActionListener(new java.awt.event.ActionListener() {
@@ -122,9 +140,9 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
         gridBagConstraints.weightx = 0.1;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
-        jpanEast.add(jbutEnd, gridBagConstraints);
+        jpanButtons.add(jbutEnd, gridBagConstraints);
 
-        getContentPane().add(jpanEast, java.awt.BorderLayout.LINE_END);
+        getContentPane().add(jpanButtons, java.awt.BorderLayout.LINE_END);
 
         jtfCenter.setText("jTextField1");
         jtfCenter.addActionListener(new java.awt.event.ActionListener() {
@@ -133,6 +151,14 @@ public class Client extends javax.swing.JFrame {
             }
         });
         getContentPane().add(jtfCenter, java.awt.BorderLayout.CENTER);
+
+        jlabs.setText("Refreshrate: 1s");
+        jpanNorth.add(jlabs);
+        jpanNorth.add(jSlider1);
+
+        jlabms.setText("1ms");
+        jpanNorth.add(jlabms);
+
         getContentPane().add(jpanNorth, java.awt.BorderLayout.PAGE_START);
 
         pack();
@@ -153,6 +179,18 @@ public class Client extends javax.swing.JFrame {
     private void jtfCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfCenterActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jtfCenterActionPerformed
+
+    private void jbutConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutConnectActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbutConnectActionPerformed
+
+    private void jbutStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutStartActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbutStartActionPerformed
+
+    private void jbutClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutClearActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jbutClearActionPerformed
 
     /**
      * @param args the command line arguments
@@ -190,13 +228,16 @@ public class Client extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JSlider jSlider1;
     private javax.swing.JButton jbutClear;
     private javax.swing.JButton jbutConnect;
     private javax.swing.JButton jbutDisconnect;
     private javax.swing.JButton jbutEnd;
     private javax.swing.JButton jbutStart;
     private javax.swing.JButton jbutStop;
-    private javax.swing.JPanel jpanEast;
+    private javax.swing.JLabel jlabms;
+    private javax.swing.JLabel jlabs;
+    private javax.swing.JPanel jpanButtons;
     private javax.swing.JPanel jpanNorth;
     private javax.swing.JTextField jtfCenter;
     // End of variables declaration//GEN-END:variables
