@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package server_client_stopuhr;
+package server_client_stopuhr.gui;
 
 /**
  *
@@ -35,11 +35,12 @@ public class Client extends javax.swing.JFrame {
         jbutStop = new javax.swing.JButton();
         jbutClear = new javax.swing.JButton();
         jbutEnd = new javax.swing.JButton();
-        jtfCenter = new javax.swing.JTextField();
         jpanNorth = new javax.swing.JPanel();
         jlabs = new javax.swing.JLabel();
         jSlider1 = new javax.swing.JSlider();
         jlabms = new javax.swing.JLabel();
+        jpanCenter = new javax.swing.JPanel();
+        jlab0 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -55,9 +56,10 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 0;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 24;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
         jpanButtons.add(jbutConnect, gridBagConstraints);
 
@@ -71,9 +73,10 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 1;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 8;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
         jpanButtons.add(jbutDisconnect, gridBagConstraints);
 
@@ -87,10 +90,11 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 2;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 46;
         gridBagConstraints.ipady = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
         jpanButtons.add(jbutStart, gridBagConstraints);
 
@@ -104,9 +108,10 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 3;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 46;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
         jpanButtons.add(jbutStop, gridBagConstraints);
 
@@ -120,9 +125,10 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 4;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 42;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
         jpanButtons.add(jbutClear, gridBagConstraints);
 
@@ -136,30 +142,34 @@ public class Client extends javax.swing.JFrame {
         gridBagConstraints.gridx = 0;
         gridBagConstraints.gridy = 5;
         gridBagConstraints.gridwidth = java.awt.GridBagConstraints.RELATIVE;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
         gridBagConstraints.ipadx = 50;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE;
-        gridBagConstraints.weightx = 0.1;
+        gridBagConstraints.anchor = java.awt.GridBagConstraints.BASELINE_LEADING;
+        gridBagConstraints.weightx = 0.2;
         gridBagConstraints.insets = new java.awt.Insets(1, 2, 1, 3);
         jpanButtons.add(jbutEnd, gridBagConstraints);
 
         getContentPane().add(jpanButtons, java.awt.BorderLayout.LINE_END);
 
-        jtfCenter.setText("jTextField1");
-        jtfCenter.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtfCenterActionPerformed(evt);
-            }
-        });
-        getContentPane().add(jtfCenter, java.awt.BorderLayout.CENTER);
-
         jlabs.setText("Refreshrate: 1s");
         jpanNorth.add(jlabs);
+
+        jSlider1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jpanNorth.add(jSlider1);
 
         jlabms.setText("1ms");
         jpanNorth.add(jlabms);
 
         getContentPane().add(jpanNorth, java.awt.BorderLayout.PAGE_START);
+
+        jpanCenter.setFont(new java.awt.Font("Dialog", 0, 72)); // NOI18N
+        jpanCenter.setLayout(new java.awt.GridBagLayout());
+
+        jlab0.setFont(new java.awt.Font("Dialog", 1, 72)); // NOI18N
+        jlab0.setText("0.000");
+        jpanCenter.add(jlab0, new java.awt.GridBagConstraints());
+
+        getContentPane().add(jpanCenter, java.awt.BorderLayout.CENTER);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -175,10 +185,6 @@ public class Client extends javax.swing.JFrame {
     private void jbutEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutEndActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jbutEndActionPerformed
-
-    private void jtfCenterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtfCenterActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtfCenterActionPerformed
 
     private void jbutConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutConnectActionPerformed
         // TODO add your handling code here:
@@ -235,10 +241,11 @@ public class Client extends javax.swing.JFrame {
     private javax.swing.JButton jbutEnd;
     private javax.swing.JButton jbutStart;
     private javax.swing.JButton jbutStop;
+    private javax.swing.JLabel jlab0;
     private javax.swing.JLabel jlabms;
     private javax.swing.JLabel jlabs;
     private javax.swing.JPanel jpanButtons;
+    private javax.swing.JPanel jpanCenter;
     private javax.swing.JPanel jpanNorth;
-    private javax.swing.JTextField jtfCenter;
     // End of variables declaration//GEN-END:variables
 }
