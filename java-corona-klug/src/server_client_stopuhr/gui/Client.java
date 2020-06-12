@@ -5,6 +5,9 @@
  */
 package server_client_stopuhr.gui;
 
+import java.awt.Dimension;
+import java.util.List;
+
 /**
  *
  * @author Simon Klug
@@ -16,6 +19,16 @@ public class Client extends javax.swing.JFrame {
      */
     public Client() {
         initComponents();
+        setTitle("Stopwatch");
+        setMinimumSize(new Dimension(300, 220));
+        setSize(new Dimension(400, 300));
+        jlabTimer.setText("0.000");
+        jbutConnect.setEnabled(true);
+        jbutDisconnect.setEnabled(false);
+        jbutStart.setEnabled(false);
+        jbutStop.setEnabled(false);
+        jbutClear.setEnabled(false);
+        jbutEnd.setEnabled(false);
     }
 
     /**
@@ -40,7 +53,7 @@ public class Client extends javax.swing.JFrame {
         jSlider1 = new javax.swing.JSlider();
         jlabms = new javax.swing.JLabel();
         jpanCenter = new javax.swing.JPanel();
-        jlab0 = new javax.swing.JLabel();
+        jlabTimer = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -165,9 +178,9 @@ public class Client extends javax.swing.JFrame {
         jpanCenter.setFont(new java.awt.Font("Dialog", 0, 72)); // NOI18N
         jpanCenter.setLayout(new java.awt.GridBagLayout());
 
-        jlab0.setFont(new java.awt.Font("Dialog", 1, 72)); // NOI18N
-        jlab0.setText("0.000");
-        jpanCenter.add(jlab0, new java.awt.GridBagConstraints());
+        jlabTimer.setFont(new java.awt.Font("Dialog", 1, 72)); // NOI18N
+        jlabTimer.setText("0.000");
+        jpanCenter.add(jlabTimer, new java.awt.GridBagConstraints());
 
         getContentPane().add(jpanCenter, java.awt.BorderLayout.CENTER);
 
@@ -175,11 +188,21 @@ public class Client extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jbutDisconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutDisconnectActionPerformed
-        // TODO add your handling code here:
+        jbutConnect.setEnabled(true);
+        jbutDisconnect.setEnabled(true);
+        jbutStart.setEnabled(true);
+        jbutStop.setEnabled(false);
+        jbutClear.setEnabled(false);
+        jbutEnd.setEnabled(false);
     }//GEN-LAST:event_jbutDisconnectActionPerformed
 
     private void jbutStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutStopActionPerformed
-        // TODO add your handling code here:
+        jbutConnect.setEnabled(false);
+        jbutDisconnect.setEnabled(true);
+        jbutStart.setEnabled(true);
+        jbutStop.setEnabled(false);
+        jbutClear.setEnabled(false);
+        jbutEnd.setEnabled(true);
     }//GEN-LAST:event_jbutStopActionPerformed
 
     private void jbutEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutEndActionPerformed
@@ -187,11 +210,25 @@ public class Client extends javax.swing.JFrame {
     }//GEN-LAST:event_jbutEndActionPerformed
 
     private void jbutConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutConnectActionPerformed
-        // TODO add your handling code here:
+        jbutConnect.setEnabled(false);
+        jbutDisconnect.setEnabled(true);
+        jbutStart.setEnabled(true);
+        jbutStop.setEnabled(false);
+        jbutClear.setEnabled(false);
+        jbutEnd.setEnabled(true);
+
+        System.out.println("Button pressed" + Thread.currentThread().getId());
+        final ConnectionWorker worker = new MyConnectionWorker(8080, "127.0.0.1");
+        worker.execute();
     }//GEN-LAST:event_jbutConnectActionPerformed
 
     private void jbutStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutStartActionPerformed
-        // TODO add your handling code here:
+        jbutConnect.setEnabled(false);
+        jbutDisconnect.setEnabled(true);
+        jbutStart.setEnabled(false);
+        jbutStop.setEnabled(true);
+        jbutClear.setEnabled(true);
+        jbutEnd.setEnabled(true);
     }//GEN-LAST:event_jbutStartActionPerformed
 
     private void jbutClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutClearActionPerformed
@@ -233,6 +270,31 @@ public class Client extends javax.swing.JFrame {
         });
     }
 
+    private class MyConnectionWorker extends ConnectionWorker {
+
+        public MyConnectionWorker(int port, String hostname) {
+            super(port, hostname);
+        }
+
+        @Override
+        protected void done() {
+            try {
+                String ergebnis = get();
+                System.out.println(ergebnis + " " + Thread.currentThread().getId());
+                jlabTimer.setText(ergebnis);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        protected void process(List<Integer> chunks) {
+            for (int x : chunks) {
+                System.out.println("Process " + x + " Thread " + Thread.currentThread().getId());
+            }
+        }
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSlider jSlider1;
     private javax.swing.JButton jbutClear;
@@ -241,7 +303,7 @@ public class Client extends javax.swing.JFrame {
     private javax.swing.JButton jbutEnd;
     private javax.swing.JButton jbutStart;
     private javax.swing.JButton jbutStop;
-    private javax.swing.JLabel jlab0;
+    private javax.swing.JLabel jlabTimer;
     private javax.swing.JLabel jlabms;
     private javax.swing.JLabel jlabs;
     private javax.swing.JPanel jpanButtons;
