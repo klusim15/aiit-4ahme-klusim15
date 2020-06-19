@@ -5,8 +5,18 @@
  */
 package server_client_stopuhr.gui;
 
+import com.google.gson.Gson;
 import java.awt.Dimension;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import server_client_stopuhr.Request;
+import server_client_stopuhr.Response;
 
 /**
  *
@@ -206,7 +216,7 @@ public class Client extends javax.swing.JFrame {
     }//GEN-LAST:event_jbutStopActionPerformed
 
     private void jbutEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutEndActionPerformed
-        // TODO add your handling code here:
+        dispose();
     }//GEN-LAST:event_jbutEndActionPerformed
 
     private void jbutConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutConnectActionPerformed
@@ -218,7 +228,12 @@ public class Client extends javax.swing.JFrame {
         jbutEnd.setEnabled(true);
 
         System.out.println("Button pressed" + Thread.currentThread().getId());
-        final ConnectionWorker worker = new MyConnectionWorker(8080, "127.0.0.1");
+        ConnectionWorker worker = null;
+        try {
+            worker = new MyConnectionWorker(8080, "127.0.0.1");
+        } catch (IOException ex) {
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+        }
         worker.execute();
     }//GEN-LAST:event_jbutConnectActionPerformed
 
@@ -272,8 +287,33 @@ public class Client extends javax.swing.JFrame {
 
     private class MyConnectionWorker extends ConnectionWorker {
 
-        public MyConnectionWorker(int port, String hostname) {
-            super(port, hostname);
+        private Response resp;
+        private Socket socket;
+
+        private MyConnectionWorker(int port, String host) throws IOException {
+            super(port, host);
+        }
+
+        @Override
+        protected String doInBackground() throws Exception {
+            final Gson g = new Gson();
+            final BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            final OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
+            while (true) {
+                try {
+                    final Request req = new Request();
+                    final String reqString = g.toJson(req);
+                    writer.write(reqString);
+                    writer.flush();
+
+                    final String respString = reader.readLine();
+                    resp = g.fromJson(respString, Response.class);
+                    publish(resp);
+                    Thread.sleep(1000);
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
         }
 
         @Override
@@ -288,9 +328,20 @@ public class Client extends javax.swing.JFrame {
         }
 
         @Override
-        protected void process(List<Integer> chunks) {
-            for (int x : chunks) {
-                System.out.println("Process " + x + " Thread " + Thread.currentThread().getId());
+        protected void process(List<Response> list) {
+            Response resp = list.get(0);
+
+            if (resp.isMaster()) {
+                jbutConnect.setEnabled(false);
+                jbutDisconnect.setEnabled(true);
+                jbutStart.setEnabled(true);
+                jbutStop.setEnabled(true);
+                jbutClear.setEnabled(true);
+                jbutEnd.setEnabled(true);
+            }
+
+            if (resp.isRunning()) {
+                jlabTimer.setText(String.format("%.3f", resp.getTime()));
             }
         }
     }
