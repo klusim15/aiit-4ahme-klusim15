@@ -28,7 +28,7 @@ public class ConnectionWorker extends SwingWorker<Object, Response> {
         socket = new Socket(host, port);
     }
 
-    public void setSliderValue(boolean sliderValue) {
+    public synchronized void setSliderValue(boolean sliderValue) {
         this.sliderValue = this.sliderValue;
     }
 
@@ -76,6 +76,11 @@ public class ConnectionWorker extends SwingWorker<Object, Response> {
                 final String respString = reader.readLine();
                 final Response resp = g.fromJson(respString, Response.class);
                 publish(resp);
+                
+                synchronized (this) {
+                    int localSliderState = sliderValue;
+                    Thread.sleep(1000 - localSliderState);
+                }
             } catch (Exception ex) {
                 ex.printStackTrace();
             }
