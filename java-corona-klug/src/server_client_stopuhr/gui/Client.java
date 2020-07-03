@@ -10,6 +10,7 @@ import java.net.Socket;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import server_client_stopuhr.Request;
 import server_client_stopuhr.Response;
 
@@ -177,6 +178,7 @@ public class Client extends javax.swing.JFrame {
         jlabs.setText("Refreshrate: 1s");
         jpanNorth.add(jlabs);
 
+        jSlider1.setMaximum(99);
         jSlider1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         jpanNorth.add(jSlider1);
 
@@ -297,6 +299,7 @@ public class Client extends javax.swing.JFrame {
                 jlabTimer.setText(ergebnis);
             } catch (Exception ex) {
                 ex.printStackTrace();
+                JOptionPane.showMessageDialog(Client.this, "Unbekannter Fehler", "Fehler", JOptionPane.ERROR_MESSAGE);
             }
         }
 
@@ -312,12 +315,24 @@ public class Client extends javax.swing.JFrame {
                     jbutClear.setEnabled(true);
                     jbutEnd.setEnabled(true);
                 } else {
-
+                    jbutConnect.setEnabled(false);
+                    jbutDisconnect.setEnabled(true);
+                    jbutStart.setEnabled(false);
+                    jbutStop.setEnabled(false);
+                    jbutClear.setEnabled(false);
+                    jbutEnd.setEnabled(false);
                 }
 
                 if (resp.isRunning()) {
-                    jlabTimer.setText(String.format("%.3f", resp.getTime()));
+                    jbutStart.setEnabled(false);
+                    jbutStop.setEnabled(true);
+                    jbutClear.setEnabled(true);
+                } else {
+                    jbutStart.setEnabled(true);
+                    jbutStop.setEnabled(false);
+                    jbutClear.setEnabled(false);
                 }
+                jlabTimer.setText(String.format("%.3f", resp.getTime()));
             }
         }
     }
