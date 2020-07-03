@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package server_client_stopuhr.gui;
 
 import com.google.gson.Gson;
@@ -23,7 +18,12 @@ import server_client_stopuhr.Response;
  * @author Simon Klug
  */
 public class Client extends javax.swing.JFrame {
-
+    
+    private boolean trytoStart;
+    private boolean trytoStop;
+    private boolean trytoClear;
+    private boolean trytoEnd;
+    
     /**
      * Creates new form Client
      */
@@ -207,16 +207,11 @@ public class Client extends javax.swing.JFrame {
     }//GEN-LAST:event_jbutDisconnectActionPerformed
 
     private void jbutStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutStopActionPerformed
-        jbutConnect.setEnabled(false);
-        jbutDisconnect.setEnabled(true);
-        jbutStart.setEnabled(true);
-        jbutStop.setEnabled(false);
-        jbutClear.setEnabled(false);
-        jbutEnd.setEnabled(true);
+        trytoStop = true;
     }//GEN-LAST:event_jbutStopActionPerformed
 
     private void jbutEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutEndActionPerformed
-        dispose();
+        trytoEnd = true;
     }//GEN-LAST:event_jbutEndActionPerformed
 
     private void jbutConnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutConnectActionPerformed
@@ -238,12 +233,7 @@ public class Client extends javax.swing.JFrame {
     }//GEN-LAST:event_jbutConnectActionPerformed
 
     private void jbutStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutStartActionPerformed
-        jbutConnect.setEnabled(false);
-        jbutDisconnect.setEnabled(true);
-        jbutStart.setEnabled(false);
-        jbutStop.setEnabled(true);
-        jbutClear.setEnabled(true);
-        jbutEnd.setEnabled(true);
+        trytoStart = true;
     }//GEN-LAST:event_jbutStartActionPerformed
 
     private void jbutClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbutClearActionPerformed
@@ -289,37 +279,20 @@ public class Client extends javax.swing.JFrame {
 
         private Response resp;
         private Socket socket;
+        private boolean tryToStart;
+        private boolean tryToStop;
+        private boolean tryToClear;
+        private boolean tryToEnd;
 
         private MyConnectionWorker(int port, String host) throws IOException {
             super(port, host);
         }
 
-        @Override
-        protected String doInBackground() throws Exception {
-            final Gson g = new Gson();
-            final BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            final OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
-            while (true) {
-                try {
-                    final Request req = new Request();
-                    final String reqString = g.toJson(req);
-                    writer.write(reqString);
-                    writer.flush();
-
-                    final String respString = reader.readLine();
-                    resp = g.fromJson(respString, Response.class);
-                    publish(resp);
-                    Thread.sleep(1000);
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-        }
-
+        
         @Override
         protected void done() {
             try {
-                String ergebnis = get();
+                String ergebnis = (String) get();
                 System.out.println(ergebnis + " " + Thread.currentThread().getId());
                 jlabTimer.setText(ergebnis);
             } catch (Exception ex) {
@@ -329,19 +302,22 @@ public class Client extends javax.swing.JFrame {
 
         @Override
         protected void process(List<Response> list) {
-            Response resp = list.get(0);
 
-            if (resp.isMaster()) {
-                jbutConnect.setEnabled(false);
-                jbutDisconnect.setEnabled(true);
-                jbutStart.setEnabled(true);
-                jbutStop.setEnabled(true);
-                jbutClear.setEnabled(true);
-                jbutEnd.setEnabled(true);
-            }
+            for (Response resp : list) {
+                if (resp.isMaster()) {
+                    jbutConnect.setEnabled(false);
+                    jbutDisconnect.setEnabled(true);
+                    jbutStart.setEnabled(true);
+                    jbutStop.setEnabled(true);
+                    jbutClear.setEnabled(true);
+                    jbutEnd.setEnabled(true);
+                } else {
 
-            if (resp.isRunning()) {
-                jlabTimer.setText(String.format("%.3f", resp.getTime()));
+                }
+
+                if (resp.isRunning()) {
+                    jlabTimer.setText(String.format("%.3f", resp.getTime()));
+                }
             }
         }
     }

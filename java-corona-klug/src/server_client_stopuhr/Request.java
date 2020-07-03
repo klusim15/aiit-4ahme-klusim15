@@ -11,6 +11,14 @@ public class Request{
         public Boolean stop;
         public Boolean clear;
         public Boolean end;
+
+    public Request(boolean b, boolean tryToStart, boolean tryToStop, boolean tryToClear, boolean tryToEnd) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Request() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
         
         
         public boolean isMaster(){

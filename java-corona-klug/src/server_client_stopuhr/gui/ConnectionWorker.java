@@ -13,7 +13,7 @@ import server_client_stopuhr.Response;
  *
  * @author Simon Klug
  */
-public class ConnectionWorker extends SwingWorker<String, Response> {
+public class ConnectionWorker extends SwingWorker<Object, Response> {
 
     private final Socket socket;
 
@@ -22,7 +22,7 @@ public class ConnectionWorker extends SwingWorker<String, Response> {
     }
 
     @Override
-    protected String doInBackground() throws Exception {
+    protected Object doInBackground() throws Exception {
         final Gson g = new Gson();
         final BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         final OutputStreamWriter writer = new OutputStreamWriter(socket.getOutputStream());
@@ -30,7 +30,7 @@ public class ConnectionWorker extends SwingWorker<String, Response> {
             try {
                 final Request req = new Request();
                 final String reqString = g.toJson(req);
-                writer.write(reqString);
+                writer.write(reqString + "\n");
                 writer.flush();
 
                 final String respString = reader.readLine();
